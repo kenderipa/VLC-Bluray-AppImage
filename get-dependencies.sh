@@ -57,7 +57,7 @@ libdvdnav \
 libdvdread \
 libglvnd \
 libgme \
-libgoom2 \ 
+libgoom2 \
 libjpeg-turbo \
 libkate \
 libmad \
@@ -119,7 +119,7 @@ x265 \
 xcb-util-keysyms \
 xosd \
 zlib \
-zvbi 
+zvbi
 
 echo "Installing debloated packages..."
 echo "---------------------------------------------------------------"
