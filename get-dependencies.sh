@@ -111,7 +111,7 @@ srt \
 systemd-libs \
 taglib \
 twolame \
-vcl \
+vlc \
 wayland \
 wayland-protocols \
 x264 \
