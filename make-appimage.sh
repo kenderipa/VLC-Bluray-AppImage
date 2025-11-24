@@ -19,6 +19,8 @@ quick-sharun \
     /usr/bin/svlc \
     /usr/lib/vlc \
     /usr/share/vlc \
+    /usr/lib/qt6 \
+    /usr/lib/qt6/plugins \
     /usr/lib/jvm/default-runtime \
     /usr/bin/java
 
