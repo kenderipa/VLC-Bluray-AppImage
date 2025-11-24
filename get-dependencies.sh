@@ -42,6 +42,7 @@ gst-plugins-base-libs \
 gtk3 \
 harfbuzz \
 hicolor-icon-theme \
+jre17-openjdk \
 pipewire-jack \
 libarchive \
 libass \
