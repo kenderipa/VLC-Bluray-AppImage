@@ -28,10 +28,10 @@ quick-sharun \
     /usr/bin/java
 
 # Install megatools if not present
-if ! command -v megadl >/dev/null 2>&1; then
-    echo "Installing megatools..."
-    pacman -S --noconfirm megatools
-fi
+#if ! command -v megadl >/dev/null 2>&1; then
+#    echo "Installing megatools..."
+#    pacman -S --noconfirm megatools
+#fi
 
 # Download AACS KEYDB.cfg
 echo "Downloading AACS KEYDB.cfg..."
