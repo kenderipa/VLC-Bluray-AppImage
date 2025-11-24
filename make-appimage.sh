@@ -58,14 +58,14 @@ megadl 'https://mega.nz/#!MFlTDYiT!I-laau3lrg9OgcAL-1DPk-c9ytxbOCKUj73NBhI8Cr0' 
 
 # Extract all archives to AppDir
 mkdir -p ../../AppDir/shared/bdplus
-for archive in /tmp/bdplus/*.{tar,tar.gz,tar.bz2,zip,rar,7z} 2>/dev/null; do
+for archive in /tmp/bdplus/*.{tar,tar.gz,tar.bz2,zip,rar,7z}; do
     [ -f "$archive" ] || continue
     echo "Extracting $(basename "$archive")..."
     case "$archive" in
-        *.tar.bz2|*.tar.gz|*.tar) tar -xf "$archive" -C ../../AppDir/shared/bdplus/ 2>/dev/null || echo "Warning: Failed to extract $archive" ;;
-        *.zip) unzip -q "$archive" -d ../../AppDir/shared/bdplus/ 2>/dev/null || echo "Warning: Failed to extract $archive" ;;
-        *.rar) unrar x "$archive" ../../AppDir/shared/bdplus/ 2>/dev/null || echo "Warning: Failed to extract $archive" ;;
-        *.7z) 7z x "$archive" -o../../AppDir/shared/bdplus/ 2>/dev/null || echo "Warning: Failed to extract $archive" ;;
+        *.tar.bz2|*.tar.gz|*.tar) tar -xf "$archive" -C ../../AppDir/shared/bdplus/ || echo "Warning: Failed to extract $archive" ;;
+        *.zip) unzip -q "$archive" -d ../../AppDir/shared/bdplus/ || echo "Warning: Failed to extract $archive" ;;
+        *.rar) unrar x "$archive" ../../AppDir/shared/bdplus/ || echo "Warning: Failed to extract $archive" ;;
+        *.7z) 7z x "$archive" -o../../AppDir/shared/bdplus/ || echo "Warning: Failed to extract $archive" ;;
     esac
 done
 
