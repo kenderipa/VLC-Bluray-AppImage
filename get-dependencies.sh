@@ -7,6 +7,7 @@ ARCH=$(uname -m)
 echo "Installing package dependencies..."
 echo "---------------------------------------------------------------"
 pacman -Syu --noconfirm \
+7zip \
 bash \
 hicolor-icon-theme \
 vlc-gui-qt \
@@ -113,6 +114,7 @@ srt \
 systemd-libs \
 taglib \
 twolame \
+unzip \
 vlc \
 wayland \
 wayland-protocols \
