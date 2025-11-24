@@ -4,6 +4,10 @@ set -eu
 
 ARCH=$(uname -m)
 
+pacman -Syu --noconfirm archlinux-keyring
+pacman-key --init
+pacman-key --populate
+
 echo "Installing package dependencies..."
 echo "---------------------------------------------------------------"
 pacman -Syu --noconfirm \
