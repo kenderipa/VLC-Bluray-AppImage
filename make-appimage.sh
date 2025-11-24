@@ -11,7 +11,6 @@ export OUTPATH=./dist
 export ICON=/usr/share/icons/hicolor/128x128/apps/vlc.png
 export DESKTOP=/usr/share/applications/vlc.desktop
 
-# Deploy dependencies
 quick-sharun \
     /usr/bin/vlc \
     /usr/bin/cvlc \
@@ -19,7 +18,9 @@ quick-sharun \
     /usr/bin/rvlc \
     /usr/bin/svlc \
     /usr/lib/vlc \
-    /usr/share/vlc
+    /usr/share/vlc \
+    /usr/lib/jvm/default-runtime \
+    /usr/bin/java
 
 # Additional changes can be done in between here
 
