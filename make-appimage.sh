@@ -19,9 +19,13 @@ quick-sharun \
     /usr/bin/svlc \
     /usr/lib/vlc \
     /usr/share/vlc \
-    /usr/lib/qt5 \
-    /usr/lib/qt5/plugins \
-    /usr/lib/jvm/default-runtime \
+    /usr/lib/libQt5Core.so.5 \
+    /usr/lib/libQt5Gui.so.5 \
+    /usr/lib/libQt5Widgets.so.5 \
+    /usr/lib/libQt5X11Extras.so.5 \
+    /usr/lib/libQt5Svg.so.5 \
+    /usr/lib/qt5/plugins/platforms \
+    /usr/lib/jvm/java-17-openjdk \
     /usr/bin/java
 
 # Additional changes can be done in between here
