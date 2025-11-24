@@ -27,16 +27,49 @@ quick-sharun \
     /usr/lib/jvm/java-17-openjdk \
     /usr/bin/java
 
-# Download and extract AACS keys and BD+ files
+# Install megatools if not present
+if ! command -v megadl >/dev/null 2>&1; then
+    echo "Installing megatools..."
+    pacman -S --noconfirm megatools
+fi
+
+# Download AACS KEYDB.cfg
 echo "Downloading AACS KEYDB.cfg..."
 mkdir -p ./AppDir/shared/aacs
-wget -q -O ./AppDir/shared/aacs/KEYDB.cfg "http://www.labdv.com/aacs/KEYDB.cfg" || \
-wget -q -O ./AppDir/shared/aacs/KEYDB.cfg "https://vlc-bluray.whoknowsmy.name/files/KEYDB.cfg"
+wget -O ./AppDir/shared/aacs/KEYDB.cfg "http://fvonline-db.bplaced.net/fv_download.php?lang=eng" || {
+    echo "Error: Failed to download KEYDB.cfg"
+    exit 1
+}
 
+# Download BD+ tables from MEGA
 echo "Downloading BD+ tables..."
 mkdir -p /tmp/bdplus
-wget -q -O /tmp/bdplus/libaacs_bdplus.tar.bz2 "https://vlc-bluray.whoknowsmy.name/files/libaacs_bdplus.tar.bz2"
-tar -xjf /tmp/bdplus/libaacs_bdplus.tar.bz2 -C ./AppDir/shared/
+cd /tmp/bdplus
+
+megadl 'https://mega.nz/file/Jd1xEQbJ#DRhG9eWLNnrmA5dcwHugnKxmVUpIsT9X-HKuuGjU7n8' || echo "Warning: Failed to download BD+ table 0"
+megadl 'https://mega.nz/file/ZZdA3QCJ#FaL2ohltwFCtX91UMngB_dUtqht8JZ3-nRgnTAJD8jk' || echo "Warning: Failed to download BD+ table 1"
+megadl 'https://mega.nz/file/pc0VTaYY#Tl1XMSex_Y9iCKmvYEKddr7GQQVQbMDEHJbw0uXumj0' || echo "Warning: Failed to download BD+ table 2"
+megadl 'https://mega.nz/file/gVsRQQ7Y#JOJwO5woXdz2X73rrvHHBTYCdLposz7aiSVkEX4vChM' || echo "Warning: Failed to download BD+ table 3"
+megadl 'https://mega.nz/file/AR8DDaib#GgSUMnNGBlVXdJT0BEkNkGm5f4NfodBaQ8SSgFFM4ZA' || echo "Warning: Failed to download BD+ table 4"
+
+# Download BD+ VM files
+echo "Downloading BD+ VM files..."
+megadl 'https://mega.nz/#!MFlTDYiT!I-laau3lrg9OgcAL-1DPk-c9ytxbOCKUj73NBhI8Cr0' || echo "Warning: Failed to download BD+ VM files"
+
+# Extract all archives to AppDir
+mkdir -p ../../AppDir/shared/bdplus
+for archive in /tmp/bdplus/*.{tar,tar.gz,tar.bz2,zip,rar,7z} 2>/dev/null; do
+    [ -f "$archive" ] || continue
+    echo "Extracting $(basename "$archive")..."
+    case "$archive" in
+        *.tar.bz2|*.tar.gz|*.tar) tar -xf "$archive" -C ../../AppDir/shared/bdplus/ 2>/dev/null || echo "Warning: Failed to extract $archive" ;;
+        *.zip) unzip -q "$archive" -d ../../AppDir/shared/bdplus/ 2>/dev/null || echo "Warning: Failed to extract $archive" ;;
+        *.rar) unrar x "$archive" ../../AppDir/shared/bdplus/ 2>/dev/null || echo "Warning: Failed to extract $archive" ;;
+        *.7z) 7z x "$archive" -o../../AppDir/shared/bdplus/ 2>/dev/null || echo "Warning: Failed to extract $archive" ;;
+    esac
+done
+
+cd -
 rm -rf /tmp/bdplus
 
 # Create wrapper script for VLC to use bundled AACS/BD+ files
