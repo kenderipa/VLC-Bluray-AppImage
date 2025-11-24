@@ -23,6 +23,7 @@ aom \
 aribb24 \
 aribb25 \
 avahi \
+ca-certificates \
 cairo \
 dav1d \
 dbus \
