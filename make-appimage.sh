@@ -12,7 +12,14 @@ export ICON=/usr/share/icons/hicolor/128x128/apps/vlc.png
 export DESKTOP=/usr/share/applications/vlc.desktop
 
 # Deploy dependencies
-quick-sharun /usr/bin/*vlc*
+quick-sharun \
+    /usr/bin/vlc \
+    /usr/bin/cvlc \
+    /usr/bin/nvlc \
+    /usr/bin/rvlc \
+    /usr/bin/svlc \
+    /usr/lib/vlc \
+    /usr/share/vlc
 
 # Additional changes can be done in between here
 
