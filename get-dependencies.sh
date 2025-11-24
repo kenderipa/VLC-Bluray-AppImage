@@ -4,10 +4,6 @@ set -eu
 
 ARCH=$(uname -m)
 
-pacman -Syu --noconfirm archlinux-keyring
-pacman-key --init
-pacman-key --populate
-
 echo "Installing package dependencies..."
 echo "---------------------------------------------------------------"
 pacman -Syu --noconfirm \
@@ -132,6 +128,7 @@ echo "---------------------------------------------------------------"
 get-debloated-pkgs --add-common --prefer-nano
 
 # Comment this out if you need an AUR package
+gpg --recv-keys F9F0A873BE9777ED
 make-aur-package megatools
 
 # If the application needs to be manually built that has to be done down here
