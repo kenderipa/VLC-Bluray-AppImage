@@ -57,11 +57,14 @@ echo "Downloading BD+ VM files..."
 megadl 'https://mega.nz/#!MFlTDYiT!I-laau3lrg9OgcAL-1DPk-c9ytxbOCKUj73NBhI8Cr0' || echo "Warning: Failed to download BD+ VM files"
 
 # Extract all archives to AppDir
-mkdir -p ../../AppDir/shared/bdplus
-for archive in /tmp/bdplus/*.7z; do
+mkdir -p ../../AppDir/shared/lib/libbluray/bdplus
+for archive in /tmp/bdplus/*.{7z,zip} 2>/dev/null; do
     [ -f "$archive" ] || continue
     echo "Extracting $(basename "$archive")..."
-    7z x -aoa "$archive" -o../../AppDir/shared/bdplus/ || echo "Warning: Failed to extract $archive"
+    case "$archive" in
+        *.7z) 7z x  "$archive" -aoa../../AppDir/shared/lib/libbluray/bdplus/ >/dev/null 2>&1 || echo "Warning: Failed to extract $archive" ;;
+        *.zip) unzip -q "$archive" -d ../../AppDir/shared/lib/libbluray/bdplus/ 2>/dev/null || echo "Warning: Failed to extract $archive" ;;
+    esac
 done
 
 cd -
