@@ -9,7 +9,7 @@ export OUTPATH=./dist
 export ICON=/usr/share/icons/hicolor/128x128/apps/vlc.png
 export DESKTOP=/usr/share/applications/vlc.desktop
 
-# Deploy VLC with all plugins, libraries, Qt5, and Java for Blu-ray menus
+# Deploy VLC with all plugins, libraries, Qt5, Java, and Blu-ray libraries
 quick-sharun \
     /usr/bin/vlc \
     /usr/bin/cvlc \
@@ -25,7 +25,9 @@ quick-sharun \
     /usr/lib/libQt5Svg.so.5 \
     /usr/lib/qt5/plugins/platforms \
     /usr/lib/jvm/java-17-openjdk \
-    /usr/bin/java
+    /usr/bin/java \
+    /usr/lib/libaacs.so.0 \
+    /usr/lib/libbluray.so.2
 
 # NOW add AACS and BD+ files to the AppDir that was just created
 
@@ -60,9 +62,7 @@ megadl 'https://mega.nz/file/AR8DDaib#GgSUMnNGBlVXdJT0BEkNkGm5f4NfodBaQ8SSgFFM4Z
 echo "Downloading BD+ VM files..."
 megadl 'https://mega.nz/#!MFlTDYiT!I-laau3lrg9OgcAL-1DPk-c9ytxbOCKUj73NBhI8Cr0' || echo "Warning: Failed to download BD+ VM files"
 
-# Extract all archives to AppDir (use absolute path)
-#APPDIR_ABS="$(pwd | sed 's|/tmp/bdplus||')/AppDir/shared/lib/libbluray/bdplus"
-
+# Extract all archives to AppDir
 for archive in *.7z *.zip; do
     [ -f "$archive" ] || continue
     echo "Extracting $(basename "$archive")... to $APPDIR_ABS"
@@ -76,32 +76,38 @@ cd -
 rm -rf /tmp/bdplus
 
 # Verify BD+ files were extracted
-if [ -z "$(ls -A ./AppDir/shared/lib/libbluray/bdplus)" ]; then
+if [ -z "$(ls -A ./AppDir/shared/lib/libbluray/bdplus 2>/dev/null)" ]; then
     echo "WARNING: BD+ directory is empty!"
 else
     echo "BD+ files successfully added to AppDir"
 fi
 
-# Create wrapper script for VLC to use bundled AACS/BD+ files
+# Create wrapper script in ./AppDir/bin where binaries are executed
 cat > ./AppDir/bin/vlc-wrapper << 'EOF'
 #!/bin/sh
-APPDIR="${APPDIR:-$(dirname "$(readlink -f "$0")")/../..}"
+APPDIR="${APPDIR:-$(dirname "$(readlink -f "$0")")/..}"
 
-# Set up AACS and BD+ paths using libaacs/libbluray environment variables
+# Set up AACS and BD+ paths
 export LIBAACS_PATH="$APPDIR/shared/lib"
 export LIBBDPLUS_PATH="$APPDIR/shared/lib/libbluray/bdplus"
-
-# Set XDG config for AACS to find KEYDB.cfg
 export XDG_CONFIG_HOME="$APPDIR/shared/config"
 
-# Execute VLC
-exec "$APPDIR/shared/bin/vlc" "$@"
+# Debug output (remove after testing)
+echo "APPDIR=$APPDIR" >&2
+echo "LIBAACS_PATH=$LIBAACS_PATH" >&2
+echo "LIBBDPLUS_PATH=$LIBBDPLUS_PATH" >&2
+echo "XDG_CONFIG_HOME=$XDG_CONFIG_HOME" >&2
+echo "KEYDB exists: $(test -f "$XDG_CONFIG_HOME/aacs/KEYDB.cfg" && echo yes || echo no)" >&2
+
+# Execute VLC (from bin directory)
+exec "$APPDIR/bin/vlc" "$@"
 EOF
 
 chmod +x ./AppDir/bin/vlc-wrapper
 
-# Update desktop file to use wrapper (correct path)
+# Update desktop file to use wrapper
 sed -i 's|Exec=/usr/bin/vlc --started-from-file %U|Exec=vlc-wrapper|g' ./AppDir/vlc.desktop
+#sed -i 's|Exec=vlc|Exec=vlc-wrapper|g' ./AppDir/vlc.desktop
 
 # Turn AppDir into AppImage
 quick-sharun --make-appimage
