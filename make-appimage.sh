@@ -26,25 +26,19 @@ quick-sharun \
     /usr/lib/qt5/plugins/platforms \
     /usr/lib/jvm/java-17-openjdk \
     /usr/bin/java
-
-# Install megatools and unzip if not present
-if ! command -v megadl >/dev/null 2>&1; then
-    echo "Installing megatools..."
-    pacman -S --noconfirm megatools unzip
-fi
-
+    
 # Download and extract AACS KEYDB.cfg
 echo "Downloading AACS KEYDB.cfg..."
-mkdir -p ./AppDir/shared/config/aacs
+mkdir -p ./AppDir/shared/config/aacs /tmp/keydb_extract
 wget -O /tmp/keydb.zip "http://fvonline-db.bplaced.net/fv_download.php?lang=eng"
-unzip -j /tmp/keydb.zip "KEYDB.cfg" -d ./AppDir/shared/config/aacs/
-rm /tmp/keydb.zip
+unzip -q /tmp/keydb.zip -d /tmp/keydb_extract/
+find /tmp/keydb_extract -name "KEYDB.cfg" -exec cp {} ./AppDir/shared/config/aacs/ \;
+rm -rf /tmp/keydb.zip /tmp/keydb_extract
 
 # Download BD+ tables from MEGA
 echo "Downloading BD+ tables..."
 mkdir -p /tmp/bdplus
 cd /tmp/bdplus
-
 
 megadl 'https://mega.nz/file/Jd1xEQbJ#DRhG9eWLNnrmA5dcwHugnKxmVUpIsT9X-HKuuGjU7n8' || echo "Warning: Failed to download BD+ table 0"
 megadl 'https://mega.nz/file/ZZdA3QCJ#FaL2ohltwFCtX91UMngB_dUtqht8JZ3-nRgnTAJD8jk' || echo "Warning: Failed to download BD+ table 1"
