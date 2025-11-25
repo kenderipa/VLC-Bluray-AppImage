@@ -98,7 +98,7 @@ export XDG_CONFIG_HOME="$APPDIR/shared/config"
 exec "$APPDIR/shared/bin/vlc" "$@"
 EOF
 
-chmod +x ./AppDir/shared/bin/vlc-wrapper
+chmod +x ./AppDir/bin/vlc-wrapper
 
 # Update desktop file to use wrapper (correct path)
 sed -i 's|Exec=/usr/bin/vlc --started-from-file %U|Exec=vlc-wrapper|g' ./AppDir/vlc.desktop
