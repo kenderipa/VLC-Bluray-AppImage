@@ -83,7 +83,7 @@ else
 fi
 
 # Create wrapper script for VLC to use bundled AACS/BD+ files
-cat > ./AppDir/shared/bin/vlc-wrapper << 'EOF'
+cat > ./AppDir/bin/vlc-wrapper << 'EOF'
 #!/bin/sh
 APPDIR="${APPDIR:-$(dirname "$(readlink -f "$0")")/../..}"
 
@@ -101,7 +101,7 @@ EOF
 chmod +x ./AppDir/shared/bin/vlc-wrapper
 
 # Update desktop file to use wrapper (correct path)
-sed -i 's|Exec=vlc|Exec=vlc-wrapper|g' ./AppDir/vlc.desktop
+sed -i 's|Exec=/usr/bin/vlc --started-from-file %U|Exec=vlc-wrapper|g' ./AppDir/vlc.desktop
 
 # Turn AppDir into AppImage
 quick-sharun --make-appimage
