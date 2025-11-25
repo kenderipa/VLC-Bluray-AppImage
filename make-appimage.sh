@@ -34,11 +34,11 @@ echo "Downloading AACS KEYDB.cfg..."
 mkdir -p ./AppDir/shared/config/aacs /tmp/keydb_extract
 wget -O /tmp/keydb.zip "http://fvonline-db.bplaced.net/fv_download.php?lang=eng"
 unzip -q /tmp/keydb.zip -d /tmp/keydb_extract/
-find /tmp/keydb_extract -name "KEYDB.cfg" -exec cp {} ./AppDir/shared/config/aacs/ \;
+find /tmp/keydb_extract -name "keydb.cfg" -exec cp {} ./AppDir/shared/config/aacs/ \;
 rm -rf /tmp/keydb.zip /tmp/keydb_extract
 
 # Verify KEYDB.cfg was copied
-if [ ! -f ./AppDir/shared/config/aacs/KEYDB.cfg ]; then
+if [ ! -f ./AppDir/shared/config/aacs/keydb.cfg ]; then
     echo "ERROR: KEYDB.cfg not found after extraction!"
     exit 1
 fi
