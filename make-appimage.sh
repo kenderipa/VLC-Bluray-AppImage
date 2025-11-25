@@ -61,7 +61,7 @@ megadl 'https://mega.nz/#!MFlTDYiT!I-laau3lrg9OgcAL-1DPk-c9ytxbOCKUj73NBhI8Cr0' 
 
 # Extract all archives to AppDir (use absolute path)
 APPDIR_ABS="$(pwd | sed 's|/tmp/bdplus||')/AppDir/shared/lib/libbluray/bdplus"
-for archive in *.7z *.zip 2>/dev/null; do
+for archive in *.7z *.zip; do
     [ -f "$archive" ] || continue
     echo "Extracting $(basename "$archive")..."
     case "$archive" in
@@ -74,7 +74,7 @@ cd -
 rm -rf /tmp/bdplus
 
 # Verify BD+ files were extracted
-if [ -z "$(ls -A ./AppDir/shared/lib/libbluray/bdplus 2>/dev/null)" ]; then
+if [ -z "$(ls -A ./AppDir/shared/lib/libbluray/bdplus)" ]; then
     echo "WARNING: BD+ directory is empty!"
 else
     echo "BD+ files successfully added to AppDir"
