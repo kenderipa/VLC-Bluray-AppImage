@@ -83,7 +83,7 @@ EOF
 chmod +x ./AppDir/shared/bin/vlc-wrapper
 
 # Update desktop file to use wrapper
-sed -i 's|Exec=vlc|Exec=vlc-wrapper|g' ./AppDir/shared/applications/vlc.desktop
+sed -i 's|Exec=vlc|Exec=vlc-wrapper|g' ./AppDir/vlc.desktop
 
 # Turn AppDir into AppImage
 quick-sharun --make-appimage
