@@ -26,7 +26,9 @@ quick-sharun \
     /usr/lib/qt5/plugins/platforms \
     /usr/lib/jvm/java-17-openjdk \
     /usr/bin/java
-    
+
+# NOW add AACS and BD+ files to the AppDir that was just created
+
 # Download and extract AACS KEYDB.cfg
 echo "Downloading AACS KEYDB.cfg..."
 mkdir -p ./AppDir/shared/config/aacs /tmp/keydb_extract
@@ -35,9 +37,16 @@ unzip -q /tmp/keydb.zip -d /tmp/keydb_extract/
 find /tmp/keydb_extract -name "KEYDB.cfg" -exec cp {} ./AppDir/shared/config/aacs/ \;
 rm -rf /tmp/keydb.zip /tmp/keydb_extract
 
+# Verify KEYDB.cfg was copied
+if [ ! -f ./AppDir/shared/config/aacs/KEYDB.cfg ]; then
+    echo "ERROR: KEYDB.cfg not found after extraction!"
+    exit 1
+fi
+echo "KEYDB.cfg successfully added to AppDir"
+
 # Download BD+ tables from MEGA
 echo "Downloading BD+ tables..."
-mkdir -p /tmp/bdplus
+mkdir -p /tmp/bdplus ./AppDir/shared/lib/libbluray/bdplus
 cd /tmp/bdplus
 
 megadl 'https://mega.nz/file/Jd1xEQbJ#DRhG9eWLNnrmA5dcwHugnKxmVUpIsT9X-HKuuGjU7n8' || echo "Warning: Failed to download BD+ table 0"
@@ -50,19 +59,26 @@ megadl 'https://mega.nz/file/AR8DDaib#GgSUMnNGBlVXdJT0BEkNkGm5f4NfodBaQ8SSgFFM4Z
 echo "Downloading BD+ VM files..."
 megadl 'https://mega.nz/#!MFlTDYiT!I-laau3lrg9OgcAL-1DPk-c9ytxbOCKUj73NBhI8Cr0' || echo "Warning: Failed to download BD+ VM files"
 
-# Extract all archives to AppDir
-mkdir -p ../../AppDir/shared/lib/libbluray/bdplus
-for archive in /tmp/bdplus/*.{7z,zip}; do
+# Extract all archives to AppDir (use absolute path)
+APPDIR_ABS="$(pwd | sed 's|/tmp/bdplus||')/AppDir/shared/lib/libbluray/bdplus"
+for archive in *.7z *.zip 2>/dev/null; do
     [ -f "$archive" ] || continue
     echo "Extracting $(basename "$archive")..."
     case "$archive" in
-        *.7z) 7z x  "$archive" -aoa../../AppDir/shared/lib/libbluray/bdplus/ >/dev/null 2>&1 || echo "Warning: Failed to extract $archive" ;;
-        *.zip) unzip -q "$archive" -d ../../AppDir/shared/lib/libbluray/bdplus/ 2>/dev/null || echo "Warning: Failed to extract $archive" ;;
+        *.7z) 7z x "$archive" -o"$APPDIR_ABS/" -y >/dev/null || echo "Warning: Failed to extract $archive" ;;
+        *.zip) unzip -q "$archive" -d "$APPDIR_ABS/" || echo "Warning: Failed to extract $archive" ;;
     esac
 done
 
 cd -
 rm -rf /tmp/bdplus
+
+# Verify BD+ files were extracted
+if [ -z "$(ls -A ./AppDir/shared/lib/libbluray/bdplus 2>/dev/null)" ]; then
+    echo "WARNING: BD+ directory is empty!"
+else
+    echo "BD+ files successfully added to AppDir"
+fi
 
 # Create wrapper script for VLC to use bundled AACS/BD+ files
 cat > ./AppDir/shared/bin/vlc-wrapper << 'EOF'
@@ -82,7 +98,7 @@ EOF
 
 chmod +x ./AppDir/shared/bin/vlc-wrapper
 
-# Update desktop file to use wrapper
+# Update desktop file to use wrapper (correct path)
 sed -i 's|Exec=vlc|Exec=vlc-wrapper|g' ./AppDir/vlc.desktop
 
 # Turn AppDir into AppImage
