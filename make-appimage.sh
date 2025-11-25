@@ -34,11 +34,11 @@ echo "Downloading AACS KEYDB.cfg..."
 mkdir -p ./AppDir/shared/config/aacs /tmp/keydb_extract
 wget -O /tmp/keydb.zip "http://fvonline-db.bplaced.net/fv_download.php?lang=eng"
 unzip -q /tmp/keydb.zip -d /tmp/keydb_extract/
-find /tmp/keydb_extract -name "keydb.cfg" -exec cp {} ./AppDir/shared/config/aacs/ \;
+find /tmp/keydb_extract -name "keydb.cfg" -exec cp {} ./AppDir/shared/config/aacs/KEYDB.cfg \;
 rm -rf /tmp/keydb.zip /tmp/keydb_extract
 
 # Verify KEYDB.cfg was copied
-if [ ! -f ./AppDir/shared/config/aacs/keydb.cfg ]; then
+if [ ! -f ./AppDir/shared/config/aacs/KEYDB.cfg ]; then
     echo "ERROR: KEYDB.cfg not found after extraction!"
     exit 1
 fi
@@ -47,6 +47,7 @@ echo "KEYDB.cfg successfully added to AppDir"
 # Download BD+ tables from MEGA
 echo "Downloading BD+ tables..."
 mkdir -p /tmp/bdplus ./AppDir/shared/lib/libbluray/bdplus
+APPDIR_ABS="$(pwd)/AppDir/shared/lib/libbluray/bdplus"
 cd /tmp/bdplus
 
 megadl 'https://mega.nz/file/Jd1xEQbJ#DRhG9eWLNnrmA5dcwHugnKxmVUpIsT9X-HKuuGjU7n8' || echo "Warning: Failed to download BD+ table 0"
@@ -60,12 +61,13 @@ echo "Downloading BD+ VM files..."
 megadl 'https://mega.nz/#!MFlTDYiT!I-laau3lrg9OgcAL-1DPk-c9ytxbOCKUj73NBhI8Cr0' || echo "Warning: Failed to download BD+ VM files"
 
 # Extract all archives to AppDir (use absolute path)
-APPDIR_ABS="$(pwd | sed 's|/tmp/bdplus||')/AppDir/shared/lib/libbluray/bdplus"
+#APPDIR_ABS="$(pwd | sed 's|/tmp/bdplus||')/AppDir/shared/lib/libbluray/bdplus"
+
 for archive in *.7z *.zip; do
     [ -f "$archive" ] || continue
-    echo "Extracting $(basename "$archive")..."
+    echo "Extracting $(basename "$archive")... to $APPDIR_ABS"
     case "$archive" in
-        *.7z) 7z x "$archive" -o"$APPDIR_ABS/" -y >/dev/null || echo "Warning: Failed to extract $archive" ;;
+        *.7z) 7z x "$archive" -o "$APPDIR_ABS/" -y || echo "Warning: Failed to extract $archive" ;;
         *.zip) unzip -q "$archive" -d "$APPDIR_ABS/" || echo "Warning: Failed to extract $archive" ;;
     esac
 done
