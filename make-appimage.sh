@@ -61,7 +61,7 @@ mkdir -p ../../AppDir/shared/bdplus
 for archive in /tmp/bdplus/*.7z; do
     [ -f "$archive" ] || continue
     echo "Extracting $(basename "$archive")..."
-    7z x -aoa "$archive" -o../../AppDir/shared/bdplus/ || echo "Warning: Failed to extract $archive" ;;
+    7z x -aoa "$archive" -o../../AppDir/shared/bdplus/ || echo "Warning: Failed to extract $archive"
 done
 
 cd -
