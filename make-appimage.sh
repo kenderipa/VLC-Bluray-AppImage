@@ -67,7 +67,7 @@ for archive in *.7z *.zip; do
     [ -f "$archive" ] || continue
     echo "Extracting $(basename "$archive")... to $APPDIR_ABS"
     case "$archive" in
-        *.7z) 7z x "$archive" -o "$APPDIR_ABS/" -y || echo "Warning: Failed to extract $archive" ;;
+        *.7z) 7z x "$archive" -o"$APPDIR_ABS/" -y || echo "Warning: Failed to extract $archive" ;;
         *.zip) unzip -q "$archive" -d "$APPDIR_ABS/" || echo "Warning: Failed to extract $archive" ;;
     esac
 done
