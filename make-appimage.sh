@@ -82,32 +82,26 @@ else
     echo "BD+ files successfully added to AppDir"
 fi
 
-# Create wrapper script in ./AppDir/bin where binaries are executed
-cat > ./AppDir/bin/vlc-wrapper << 'EOF'
+# Rename the original VLC binary so we can wrap it
+mv ./AppDir/bin/vlc ./AppDir/bin/vlc.real
+
+# Create wrapper script - must be where the original binary was
+cat > ./AppDir/bin/vlc << 'EOF'
 #!/bin/sh
-APPDIR="${APPDIR:-$(dirname "$(readlink -f "$0")")/..}"
+SHARUN_DIR="${SHARUN_DIR:-$(dirname "$(readlink -f "$0")")/../..}"
 
 # Set up AACS and BD+ paths
-export LIBAACS_PATH="$APPDIR/shared/lib"
-export LIBBDPLUS_PATH="$APPDIR/shared/lib/libbluray/bdplus"
-export XDG_CONFIG_HOME="$APPDIR/shared/config"
+export LIBAACS_PATH="$SHARUN_DIR/shared/lib"
+export LIBBDPLUS_PATH="$SHARUN_DIR/shared/lib/libbluray/bdplus"
+export XDG_CONFIG_HOME="$SHARUN_DIR/shared/config"
 
-# Debug output (remove after testing)
-echo "APPDIR=$APPDIR" >&2
-echo "LIBAACS_PATH=$LIBAACS_PATH" >&2
-echo "LIBBDPLUS_PATH=$LIBBDPLUS_PATH" >&2
-echo "XDG_CONFIG_HOME=$XDG_CONFIG_HOME" >&2
-echo "KEYDB exists: $(test -f "$XDG_CONFIG_HOME/aacs/KEYDB.cfg" && echo yes || echo no)" >&2
-
-# Execute VLC (from bin directory)
-exec "$APPDIR/bin/vlc" "$@"
+# Execute real VLC
+exec "$SHARUN_DIR/bin/vlc.real" "$@"
 EOF
 
-chmod +x ./AppDir/bin/vlc-wrapper
+chmod +x ./AppDir/bin/vlc
 
-# Update desktop file to use wrapper
-sed -i 's|Exec=/usr/bin/vlc --started-from-file %U|Exec=vlc-wrapper|g' ./AppDir/vlc.desktop
-#sed -i 's|Exec=vlc|Exec=vlc-wrapper|g' ./AppDir/vlc.desktop
+echo "VLC wrapper created successfully"
 
 # Turn AppDir into AppImage
 quick-sharun --make-appimage
