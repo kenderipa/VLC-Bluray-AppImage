@@ -4,11 +4,8 @@ ARCH=$(uname -m)
 VERSION=$(pacman -Q vlc | awk '{print $2; exit}')
 export ARCH VERSION
 export OUTPATH=./dist
-#export ADD_HOOKS="self-updater.bg.hook"
-#export UPINFO="gh-releases-zsync|${GITHUB_REPOSITORY%/*}|${GITHUB_REPOSITORY#*/}|latest|*$ARCH.AppImage.zsync"
 export ICON=/usr/share/icons/hicolor/128x128/apps/vlc.png
 export DESKTOP=/usr/share/applications/vlc.desktop
-
 
 # Deploy VLC with all plugins, libraries, Qt5, Java, and Blu-ray libraries
 quick-sharun \
@@ -30,28 +27,24 @@ quick-sharun \
     /usr/lib/libaacs.so.0 \
     /usr/lib/libbluray.so.2
 
-# NOW add AACS and BD+ files to the AppDir that was just created
-
-# Download and extract AACS KEYDB.cfg
+# Download and extract AACS KEYDB.cfg to standard location
 echo "Downloading AACS KEYDB.cfg..."
 mkdir -p ./AppDir/etc/xdg/aacs /tmp/keydb_extract
 wget -O /tmp/keydb.zip "http://fvonline-db.bplaced.net/fv_download.php?lang=eng"
 unzip -q /tmp/keydb.zip -d /tmp/keydb_extract/
-#find /tmp/keydb_extract -name "keydb.cfg" -exec cp {} ./AppDir/shared/config/aacs/KEYDB.cfg \;
 find /tmp/keydb_extract -name "keydb.cfg" -exec cp {} ./AppDir/etc/xdg/aacs/KEYDB.cfg \;
 rm -rf /tmp/keydb.zip /tmp/keydb_extract
 
-# Verify KEYDB.cfg was copied
 if [ ! -f ./AppDir/etc/xdg/aacs/KEYDB.cfg ]; then
     echo "ERROR: KEYDB.cfg not found after extraction!"
     exit 1
 fi
-echo "KEYDB.cfg successfully added to AppDir"
+echo "KEYDB.cfg successfully added to AppDir/etc/xdg/aacs/"
 
-# Download BD+ tables from MEGA
+# Download BD+ tables to standard location
 echo "Downloading BD+ tables..."
-mkdir -p /tmp/bdplus ./AppDir/etc/xdg/bdplus
-APPDIR_ABS="$(pwd)/AppDir/etc/xdg/bdplus"
+mkdir -p /tmp/bdplus ./AppDir/shared/lib/libbluray/bdplus/conv_tab
+APPDIR_ABS="$(pwd)/AppDir/shared/lib/libbluray/bdplus"
 cd /tmp/bdplus
 
 megadl 'https://mega.nz/file/Jd1xEQbJ#DRhG9eWLNnrmA5dcwHugnKxmVUpIsT9X-HKuuGjU7n8' || echo "Warning: Failed to download BD+ table 0"
@@ -64,10 +57,10 @@ megadl 'https://mega.nz/file/AR8DDaib#GgSUMnNGBlVXdJT0BEkNkGm5f4NfodBaQ8SSgFFM4Z
 echo "Downloading BD+ VM files..."
 megadl 'https://mega.nz/#!MFlTDYiT!I-laau3lrg9OgcAL-1DPk-c9ytxbOCKUj73NBhI8Cr0' || echo "Warning: Failed to download BD+ VM files"
 
-# Extract all archives to AppDir
+# Extract all archives
 for archive in *.7z *.zip; do
     [ -f "$archive" ] || continue
-    echo "Extracting $(basename "$archive")... to $APPDIR_ABS"
+    echo "Extracting $(basename "$archive")..."
     case "$archive" in
         *.7z) 7z x "$archive" -o"$APPDIR_ABS/" -y || echo "Warning: Failed to extract $archive" ;;
         *.zip) unzip -q "$archive" -d "$APPDIR_ABS/" || echo "Warning: Failed to extract $archive" ;;
@@ -77,12 +70,14 @@ done
 cd -
 rm -rf /tmp/bdplus
 
-# Verify BD+ files were extracted
-if [ -z "$(ls -A ./AppDir/etc/xdg/bdplus 2>/dev/null)" ]; then
+if [ -z "$(ls -A ./AppDir/shared/lib/libbluray/bdplus)" ]; then
     echo "WARNING: BD+ directory is empty!"
 else
-    echo "BD+ files successfully added to AppDir"
+    echo "BD+ files successfully added to AppDir/shared/lib/libbluray/bdplus/"
 fi
+
+# Use PATH_MAPPING_HARDCODED to tell quick-sharun to patch these paths
+export PATH_MAPPING_HARDCODED="libaacs.so.0 libbluray.so.2"
 
 # Turn AppDir into AppImage
 quick-sharun --make-appimage
