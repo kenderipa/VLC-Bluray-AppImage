@@ -8,6 +8,8 @@ export OUTPATH=./dist
 #export UPINFO="gh-releases-zsync|${GITHUB_REPOSITORY%/*}|${GITHUB_REPOSITORY#*/}|latest|*$ARCH.AppImage.zsync"
 export ICON=/usr/share/icons/hicolor/128x128/apps/vlc.png
 export DESKTOP=/usr/share/applications/vlc.desktop
+export PATH_MAPPING_HARDCODED='*aacs*'
+
 
 # Deploy VLC with all plugins, libraries, Qt5, Java, and Blu-ray libraries
 quick-sharun \
