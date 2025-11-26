@@ -34,7 +34,7 @@ quick-sharun \
 
 # Download and extract AACS KEYDB.cfg
 echo "Downloading AACS KEYDB.cfg..."
-mkdir -p ./AppDir/shared/config/aacs /tmp/keydb_extract
+mkdir -p ./AppDir/etc/xdg/aacs /tmp/keydb_extract
 wget -O /tmp/keydb.zip "http://fvonline-db.bplaced.net/fv_download.php?lang=eng"
 unzip -q /tmp/keydb.zip -d /tmp/keydb_extract/
 #find /tmp/keydb_extract -name "keydb.cfg" -exec cp {} ./AppDir/shared/config/aacs/KEYDB.cfg \;
