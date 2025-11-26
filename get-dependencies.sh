@@ -10,6 +10,7 @@ pacman -Syu --noconfirm \
 7zip \
 bash \
 hicolor-icon-theme \
+vlc \
 vlc-gui-qt \
 vlc-gui-ncurses \
 vlc-gui-skins2 \
@@ -86,6 +87,7 @@ libtheora \
 libtiger \
 libupnp \
 libva \
+libvdpau \
 libvorbis \
 libvpx \
 libx11 \
@@ -115,7 +117,6 @@ systemd-libs \
 taglib \
 twolame \
 unzip \
-vlc \
 wayland \
 wayland-protocols \
 x264 \
