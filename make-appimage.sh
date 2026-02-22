@@ -22,7 +22,7 @@ quick-sharun \
     /usr/lib/libQt5X11Extras.so.5 \
     /usr/lib/libQt5Svg.so.5 \
 #    /usr/lib/qt5/plugins/platforms \
-    /usr/lib/jvm/java-17-openjdk \
+    /usr/lib/jvm/java-17-openjdk/* \
     /usr/bin/java \
     /usr/lib/libaacs.so.0 \
     /usr/lib/libbluray.so.2
