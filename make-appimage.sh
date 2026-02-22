@@ -47,15 +47,15 @@ mkdir -p /tmp/bdplus ./AppDir/shared/lib/libbluray/bdplus/conv_tab
 APPDIR_ABS="$(pwd)/AppDir/shared/lib/libbluray/bdplus"
 cd /tmp/bdplus
 
-megadl 'https://mega.nz/file/Jd1xEQbJ#DRhG9eWLNnrmA5dcwHugnKxmVUpIsT9X-HKuuGjU7n8' || echo "Warning: Failed to download BD+ table 0"
-megadl 'https://mega.nz/file/ZZdA3QCJ#FaL2ohltwFCtX91UMngB_dUtqht8JZ3-nRgnTAJD8jk' || echo "Warning: Failed to download BD+ table 1"
-megadl 'https://mega.nz/file/pc0VTaYY#Tl1XMSex_Y9iCKmvYEKddr7GQQVQbMDEHJbw0uXumj0' || echo "Warning: Failed to download BD+ table 2"
-megadl 'https://mega.nz/file/gVsRQQ7Y#JOJwO5woXdz2X73rrvHHBTYCdLposz7aiSVkEX4vChM' || echo "Warning: Failed to download BD+ table 3"
-megadl 'https://mega.nz/file/AR8DDaib#GgSUMnNGBlVXdJT0BEkNkGm5f4NfodBaQ8SSgFFM4ZA' || echo "Warning: Failed to download BD+ table 4"
+#megadl 'https://mega.nz/file/Jd1xEQbJ#DRhG9eWLNnrmA5dcwHugnKxmVUpIsT9X-HKuuGjU7n8' || echo "Warning: Failed to download BD+ table 0"
+#megadl 'https://mega.nz/file/ZZdA3QCJ#FaL2ohltwFCtX91UMngB_dUtqht8JZ3-nRgnTAJD8jk' || echo "Warning: Failed to download BD+ table 1"
+##megadl 'https://mega.nz/file/pc0VTaYY#Tl1XMSex_Y9iCKmvYEKddr7GQQVQbMDEHJbw0uXumj0' || echo "Warning: Failed to download BD+ table 2"
+#megadl 'https://mega.nz/file/gVsRQQ7Y#JOJwO5woXdz2X73rrvHHBTYCdLposz7aiSVkEX4vChM' || echo "Warning: Failed to download BD+ table 3"
+#megadl 'https://mega.nz/file/AR8DDaib#GgSUMnNGBlVXdJT0BEkNkGm5f4NfodBaQ8SSgFFM4ZA' || echo "Warning: Failed to download BD+ table 4"
 
 # Download BD+ VM files
-echo "Downloading BD+ VM files..."
-megadl 'https://mega.nz/#!MFlTDYiT!I-laau3lrg9OgcAL-1DPk-c9ytxbOCKUj73NBhI8Cr0' || echo "Warning: Failed to download BD+ VM files"
+#echo "Downloading BD+ VM files..."
+#megadl 'https://mega.nz/#!MFlTDYiT!I-laau3lrg9OgcAL-1DPk-c9ytxbOCKUj73NBhI8Cr0' || echo "Warning: Failed to download BD+ VM files"
 
 # Extract all archives
 for archive in *.7z *.zip; do
@@ -70,11 +70,11 @@ done
 cd -
 rm -rf /tmp/bdplus
 
-if [ -z "$(ls -A ./AppDir/shared/lib/libbluray/bdplus)" ]; then
-    echo "WARNING: BD+ directory is empty!"
-else
-    echo "BD+ files successfully added to AppDir/shared/lib/libbluray/bdplus/"
-fi
+#if [ -z "$(ls -A ./AppDir/shared/lib/libbluray/bdplus)" ]; then
+#    echo "WARNING: BD+ directory is empty!"
+#else
+#    echo "BD+ files successfully added to AppDir/shared/lib/libbluray/bdplus/"
+#fi
 
 # Use PATH_MAPPING_HARDCODED to tell quick-sharun to patch these paths
 export PATH_MAPPING_HARDCODED="libaacs.so.0 libbluray.so.2"
