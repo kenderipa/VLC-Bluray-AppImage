@@ -101,6 +101,7 @@ lua \
 mesa \
 mpg123 \
 opus \
+patchelf \
 pcsclite \
 projectm \
 protobuf \
