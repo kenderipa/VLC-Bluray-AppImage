@@ -24,8 +24,8 @@ quick-sharun \
 #    /usr/lib/qt5/plugins/platforms \
     #/usr/lib/jvm/java-17-openjdk/bin/* \
     /usr/bin/java \
-    /usr/lib/libaacs.so.0 \
-    /usr/lib/libbluray.so.2
+    #/usr/lib/libaacs.so.0 \
+    #/usr/lib/libbluray.so.2
 
 # Download and extract AACS KEYDB.cfg to standard location
 echo "Downloading AACS KEYDB.cfg..."
